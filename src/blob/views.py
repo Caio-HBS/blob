@@ -1,7 +1,7 @@
 import random
 
 from django.urls import reverse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.views.decorators.http import require_http_methods
@@ -17,7 +17,7 @@ def home_view(request):
 
     Gets the five newest posts from the db to show on the main page.
 
-    URL Call: / 
+    URL Call: /
     """
     if request.user.is_authenticated:
         posts = Post.objects.exclude(owner=request.user).order_by("-id")[:5]
@@ -40,10 +40,12 @@ def login_view(request):
         return redirect("home")
 
     if request.method == "POST":
-        form = AuthenticationForm(request.POST)
+        form = AuthenticationForm(data=request.POST)
         if form.is_valid():
             login(request, form.get_user())
             return redirect("home")
+        else:
+            return render(request, 'blob/login.html', {"form": form})
     else:
         form = AuthenticationForm()
 
@@ -107,12 +109,17 @@ def post_detail_view(request, slug):
     # TODO: user can delete comment.
     return
 
+
 @require_http_methods(["GET"])
 def post_random_view(request):
     """
-    TODO: documentation.
+    View for redirecting the user to a random post.
+
+    Redirects the user .
+
+    URL Call: post/random/
     """
     max_post_count = Post.objects.count()
-    random_post = Post.objects.get(id=random.randint(1, max_post_count))
-    
+    random_post = get_object_or_404(Post, pk=random.randint(1, max_post_count))
+
     return redirect(reverse("post_detail", kwargs={"slug": random_post.slug}))

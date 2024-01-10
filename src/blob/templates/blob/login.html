@@ -1,0 +1,25 @@
+{% extends "base.html" %} 
+{% load static %} 
+
+{% block content %} 
+  {% include 'includes/navbar.html' %}
+  <main class="bg-cover pt-20" style="background-image:url('{% static "images/background.svg" %}')">
+    <div class="flex items-center justify-center min-h-screen p-2">
+      <div class="w-fit h-fit p-10 justify-center rounded-lg bg-blob-orange">
+        <form method="post" action="{% url "login" %}" class="flex flex-col">
+          {% csrf_token %}
+          <div class="flex py-2">
+            <input type="text" name="username" placeholder="Username" autofocus 
+            autocapitalize="none" autocomplete="username" required id="id_username" 
+            class="rounded-lg">
+            <button type="submit" class="p-2 px-4 ml-2 rounded-lg hover:text-blob-black 
+            hover:bg-blob-green text-blob-white bg-blob-sepia">Login</button>
+          </div>
+          <input type="password" name="password" placeholder="Password" autofocus 
+          autocomplete="current-password" required id="id_password" 
+          class="w-fit rounded-lg">
+        </form>
+      </div>
+    </div>
+  </main>
+{% endblock %}
