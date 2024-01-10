@@ -1,6 +1,6 @@
 {% load static %}
 
-<nav class="flex items-center text-blob-white text-xl bg-blob-sepia">
+<nav class="fixed flex items-center w-screen text-blob-white text-xl bg-blob-sepia">
   <div class="p-5">
     <a href="{% url "home" %}"> <img src="{% static "images/main-title.png" %}"
     alt="Blob logo" class="h-10" />
@@ -25,11 +25,13 @@
       <strong>
         <button type="button" class="p-2 rounded-lg text-blob-black hover:text-blob-white bg-blob-orange">Logout</button>
       </strong>
+    </a>
     {% else %} 
     <a href="{% url "login" %}">
       <strong>
         <button type="button" class="p-2 rounded-lg text-blob-black hover:text-blob-white bg-blob-orange">Login</button>
       </strong>
+    </a>
     {% endif %}
   </div>
 </nav>
