@@ -1,0 +1,35 @@
+{% load static %}
+
+<nav class="flex items-center text-blob-white text-xl bg-blob-sepia">
+  <div class="p-5">
+    <a href="{% url "home" %}"> <img src="{% static "images/main-title.png" %}"
+    alt="Blob logo" class="h-10" />
+  </div>
+  <div class="px-5">
+    <a href="{% url "post_random_view" %}">
+      <strong>
+        <h2 class="hover:text-blob-black">Random Post</h2>
+      </strong>
+  </div>
+  {% if request.user.is_authenticated %}
+  <div class="px-5">
+    <a href="{% url "new_post" %}">
+      <strong>
+        <h2 class="hover:text-blob-black">New Post</h2>
+      </strong>
+  </div>
+  {% endif %}
+  <div class="fixed right-5">
+    {% if request.user.is_authenticated %} 
+    <a href="{% url "logout" %}">
+      <strong>
+        <button type="button" class="p-2 rounded-lg text-blob-black hover:text-blob-white bg-blob-orange">Logout</button>
+      </strong>
+    {% else %} 
+    <a href="{% url "login" %}">
+      <strong>
+        <button type="button" class="p-2 rounded-lg text-blob-black hover:text-blob-white bg-blob-orange">Login</button>
+      </strong>
+    {% endif %}
+  </div>
+</nav>
