@@ -18,8 +18,10 @@ def home_view(request):
     Gets the five newest posts from the db to show on the main page.
 
     URL Call: /
+    HTTP Methods allowed: GET.
     """
-    if request.user.is_authenticated:
+    posts_count = Post.objects.count()
+    if request.user.is_authenticated and posts_count > 5:
         posts = Post.objects.exclude(owner=request.user).order_by("-id")[:5]
     posts = Post.objects.order_by("-id")[:5]
 
@@ -35,6 +37,7 @@ def login_view(request):
     validates the form and logs them in.
 
     URL Call: login/
+    HTTP Methods allowed: GET, POST.
     """
     if request.user.is_authenticated:
         return redirect("home")
@@ -61,6 +64,7 @@ def logout_view(request):
     the login page.
 
     URL Call: logout/
+    HTTP Methods allowed: POST.
     """
     if request.user.is_authenticated:
         logout(request)
@@ -71,7 +75,12 @@ def logout_view(request):
 @require_http_methods(["GET", "POST"])
 def register_view(request):
     """
-    TODO: documentation.
+    View for registering users.
+
+    Gives the users a way to register on the site through the RegistrationForm.
+
+    URL Call: register/
+    HTTP Methods allowed: GET, POST.
     """
     if request.method == "POST":
         form = RegistrationForm(request.POST)
@@ -87,12 +96,24 @@ def register_view(request):
 @require_http_methods(["GET", "POST"])
 def new_post_view(request):
     """
-    TODO: documentation.
+    View to create new posts.
+
+    Validates new posts and creates them on the db.
+
+    URL Call: post/new-post/
+    HTTP Methods allowed: GET, POST.
     """
+    if not request.user.is_authenticated:
+        return redirect("home")
+
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            new_post = form.save(commit=False)
+            new_post.owner = request.user
+            new_post.save()
+        else:
+            return render(request, 'blob/new-post.html', {"form": form})
     else:
         form = PostForm()
 
@@ -115,9 +136,10 @@ def post_random_view(request):
     """
     View for redirecting the user to a random post.
 
-    Redirects the user .
+    Redirects the user.
 
     URL Call: post/random/
+    HTTP Methods allowed: GET.
     """
     max_post_count = Post.objects.count()
     random_post = get_object_or_404(Post, pk=random.randint(1, max_post_count))

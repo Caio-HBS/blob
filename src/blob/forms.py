@@ -17,7 +17,7 @@ class RegistrationForm(UserCreationForm):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ["owner", "title", "image", "text"]
+        fields = ["title", "text"]
 
     def clean_title(self):
         title = self.cleaned_data["title"]
