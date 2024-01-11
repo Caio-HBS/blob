@@ -6,7 +6,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.views.decorators.http import require_http_methods
 
-from blob.forms import PostForm, RegistrationForm
+from blob.forms import PostForm, RegistrationForm, CommentForm
 from blob.models import Post, Comments
 
 
@@ -120,15 +120,41 @@ def new_post_view(request):
     return render(request, "blob/new-post.html", {"form": form})
 
 
-@require_http_methods(["GET", "POST"])
+@require_http_methods(["GET", "POST", "DELETE"])
 def post_detail_view(request, slug):
     """
-    TODO: documentation.
+    View to visualize and delete a single post.
+
+    Allows user to view a single post as well as leave a comment and delete (should
+    the user be the owner of the post).
+
+    URL Call: "post/<slug:slug>/
+    HTTP Methods allowed: GET, POST, DELETE.
     """
-    # TODO: new comment form and validation.
-    # TODO: user can delete post.
-    # TODO: user can delete comment.
-    return
+    post = get_object_or_404(Post, slug=slug)
+    comments_for_post = Comments.objects.filter(related_post=post)
+    
+    if request.method == "POST" and request.user.is_authenticated:
+        form_type = request.POST.get('form_type')
+        # Handles post deletion.
+        if form_type == 'delete_post' and post.owner == request.user:
+            post.delete()
+            return redirect("home")
+        
+        # Handles new comments.
+        form_for_new_comment = CommentForm(request.POST)
+        if form_for_new_comment.is_valid():
+            new_comment = form_for_new_comment.save(commit=False)
+            new_comment.owner = request.user
+            new_comment.related_post = post
+            new_comment.save()
+        else:
+            return render(request, 'blob/post-detail.html', {"post": post, "comments": comments_for_post, "form": form_for_new_comment})
+
+    else:
+        form_for_new_comment = CommentForm()
+
+    return render(request, "blob/post-detail.html", {"post": post, "comments": comments_for_post, "form": form_for_new_comment})
 
 
 @require_http_methods(["GET"])
