@@ -11,13 +11,19 @@
           <div class="flex py-2">
             <input type="text" name="username" placeholder="Username" autofocus 
             autocapitalize="none" autocomplete="username" required id="id_username" 
-            class="rounded-lg">
-            <button type="submit" class="p-2 px-4 ml-2 rounded-lg hover:text-blob-black 
+            class="rounded-lg" />
+            <button type="submit" class="p-2 px-5 ml-2 rounded-lg hover:text-blob-black 
             hover:bg-blob-green text-blob-white bg-blob-sepia">Login</button>
           </div>
-          <input type="password" name="password" placeholder="Password" autofocus 
-          autocomplete="current-password" required id="id_password" 
-          class="w-fit rounded-lg">
+          <div class="flex py-2">
+            <input type="password" name="password" placeholder="Password" autofocus 
+            autocomplete="current-password" required id="id_password" 
+            class="w-fit rounded-lg" />
+            <a href="{% url "register" %}">
+              <button type="button" class="p-2 px-3 ml-2 rounded-lg hover:text-blob-black 
+              hover:bg-blob-green text-blob-white bg-blob-sepia">Register</button>
+            </a>
+          </div>
         </form>
       </div>
     </div>

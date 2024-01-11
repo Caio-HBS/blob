@@ -6,20 +6,25 @@
   <main class="bg-cover pt-20" style="background-image: url('{% static "images/background.svg" %}')">
     <div class="flex items-center justify-center min-h-screen h-full p-2">
       <div class="w-2/5 h-fit p-10 justify-center rounded-lg bg-blob-sepia">
-        <strong><h2 class="text-3xl text-center text-blob-white">Click to view a post:</h2></strong>
+        <strong>
+          <h2 class="text-3xl text-center text-blob-white">Click to view a post:</h2>
+        </strong>
         <ul class="items-start p-5 text-justify rounded-lg text-blob-black">
         {% if not posts %}
         <li class="text-lg text-center text-blob-white">No posts were made yet.</li>
         {% endif %}
           {% for post in posts %}
           <a href="{% url 'post_detail' slug=post.slug %}" />
-          <li class="py-5 p-2 m-2 rounded-lg hover:text-blob-white bg-blob-orange">
-            <strong><h2 class="text-2xl">{{ post.title }}</h2></strong>
+          <li class="py-5 p-2 m-2 rounded-lg bg-blob-orange">
+            <strong>
+              <h2 class="text-2xl hover:text-blob-white">{{ post.title }}</h2>
+            </strong>
             {% if post.text|length > 50 %}
             <p class="text-lg">{{ post.text|truncatechars:50 }}</p>
             {% else %}
             <p class="text-lg">{{ post.text }}...</p>
             {% endif %}
+            <p>By: <strong>{{ post.owner }}</strong></p>
           </li>
           {% endfor %}
         </ul>

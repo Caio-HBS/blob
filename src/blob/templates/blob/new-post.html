@@ -1,0 +1,20 @@
+{% extends "base.html" %} 
+{% load static %} 
+
+{% block content %} 
+  {% include 'includes/navbar.html' %}
+  <main class="bg-cover pt-20" style="background-image:url('{% static "images/background.svg" %}')">
+    <div class="flex items-center justify-center min-h-screen p-2">
+      <div class="w-full mx-36 h-fit p-10 pb-5 justify-center rounded-lg shadow-blob-black shadow-2xl bg-blob-orange">
+        <h2 class="text-4xl"><strong>Make a New Post</strong></h2>
+        <form method="post" action="{% url "new_post" %}" class="flex flex-col">
+          {% csrf_token %}
+          <input type="text" name="title" placeholder="Title of your post" maxlength="50" required class="my-2 rounded-lg" id="id_title" />
+          <textarea name="text" placeholder="Speak your mind" maxlength="2000" required id="id_text" class="h-64 rounded-lg resize-none"></textarea>
+          <div class="text-end"><button class="text-2xl p-2 mt-2 rounded-lg hover:text-blob-black 
+          hover:bg-blob-green text-blob-white bg-blob-sepia"><strong>Post</strong></button></div>
+        </form>
+      </div>
+    </div>
+  </main>
+{% endblock %}

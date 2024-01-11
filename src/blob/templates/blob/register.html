@@ -1,0 +1,28 @@
+{% extends "base.html" %} 
+{% load static %} 
+
+{% block content %} 
+  {% include 'includes/navbar.html' %}
+  <main class="bg-cover pt-20" style="background-image:url('{% static "images/background.svg" %}')">
+    <div class="flex items-center justify-center min-h-screen p-2">
+      <div class="w-fit h-fit p-10 pb-4 justify-center rounded-lg bg-blob-orange">
+        <form method="post" action="{% url "register" %}" class="flex flex-col">
+          {% csrf_token %}
+          <input type="text" name="username" autofocus="" required 
+          aria-describedby="id_username_helptext"  placeholder="Username" 
+          class="my-1 rounded-lg" id="id_username" />
+          <input type="email" name="email" required placeholder="Email" 
+          class="my-1 rounded-lg" id="id_email" />
+          <input type="password" name="password1" autocomplete="new-password" 
+          required aria-describedby="id_password1_helptext" placeholder="Password" 
+          class="my-1 rounded-lg" id="id_password1" />
+          <input type="password" name="password2" autocomplete="new-password" 
+          required aria-describedby="id_password2_helptext" placeholder="Confirm password" 
+          class="my-1 rounded-lg" id="id_password2" />
+          <button class="p-2 px-3 mt-2 rounded-lg hover:text-blob-black 
+          hover:bg-blob-green text-blob-white bg-blob-sepia">Register</button>
+        </form>
+      </div>
+    </div>
+  </main>
+{% endblock %}
