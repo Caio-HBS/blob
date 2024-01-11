@@ -1,0 +1,54 @@
+{% extends "base.html" %} 
+{% load static %} 
+
+{% block content %} 
+  {% include 'includes/navbar.html' %}
+  <main class="bg-cover pt-20" style="background-image:url('{% static "images/background.svg" %}')">
+    <div class="flex items-center justify-center min-h-screen p-2">
+      <div class="w-full mx-36 h-fit p-10 pb-5 justify-center rounded-lg shadow-blob-black shadow-2xl bg-blob-orange">        
+        <form method="post" action="{% url "post_detail" slug=post.slug %}" class="mb-5">
+          {% csrf_token %}
+          <input type="hidden" name="form_type" value="delete_post">
+          <div class="flex items-center justify-between">
+            <h2 class="text-4xl">
+              <strong>{{ post.title }}</strong>
+            </h2>
+            {%if request.user == post.owner%}
+              <button type="submit" 
+              class="rounded-lg p-2 bg-red-500 hover:bg-red-700 hover:text-blob-white">Delete</button>
+            {%endif%}
+          </div>
+          <h3>by: {{ post.owner.username }}</h3>
+        </form>
+        <p class="text-justify mb-5">{{ post.text }}</p>
+        {% if request.user.is_authenticated %}
+          <form method="post" action="{% url "post_detail" slug=post.slug %}" 
+          class="flex flex-col">
+            {% csrf_token %}
+            <h2>
+              <strong>Leave a comment</strong>
+            </h2>
+            <div class="items-center">
+              <input type="text" name="text" placeholder="Something to add?" 
+              maxlength="150" required="" id="id_text" class="rounded-lg w-1/2">
+              <button class="text-2xl p-2 mt-2 rounded-lg hover:text-blob-black hover:bg-blob-green text-blob-white bg-blob-sepia">
+                <strong>Comment</strong>
+              </button>
+            </div>
+          </form>
+        {% endif %}
+        <h2 class="my-2 text-xl"><strong>Comments:</strong></h2>
+        <div>
+          {% for comment in comments %}
+            <div class="flex items-center mt-4  p-2 w-fit rounded-lg bg-yellow-600">
+              <p>
+                <strong>{{ comment.owner.username }}</strong>:
+              </p>
+              <p class="text-justify"> {{ comment.text }}</p>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </main>
+{% endblock %}
